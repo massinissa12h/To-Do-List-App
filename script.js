@@ -1,11 +1,13 @@
 const inputBox = document.getElementById('input-box');
 const listContainer = document.getElementById('list-container');
+const swearWords = ["fuck", "fuck off", "bitch", /* Add your swear words here */];
 
 function addTask() {
-    if(inputBox.value === ''){
+    if (inputBox.value === '') {
         alert("You must write something");
-    }
-    else{
+    } else if (containsSwearWord(inputBox.value)) {
+        alert("Please don't use such terms");
+    } else {
         let li = document.createElement("li");
         li.innerHTML = inputBox.value;
         listContainer.appendChild(li);
@@ -17,19 +19,28 @@ function addTask() {
     saveData();
 }
 
-listContainer.addEventListener("click",function(e) {
-    if(e.target.tagName === "LI"){
+function containsSwearWord(text) {
+    const lowerText = text.toLowerCase();
+    for (const swearWord of swearWords) {
+        if (lowerText.includes(swearWord)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+listContainer.addEventListener("click", function (e) {
+    if (e.target.tagName === "LI") {
         e.target.classList.toggle("checked");
         saveData();
-    }
-    else if (e.target.tagName === "SPAN") {
+    } else if (e.target.tagName === "SPAN") {
         e.target.parentElement.remove();
         saveData();
     }
-},false);
+}, false);
 
 function saveData() {
-    localStorage.setItem("data",listContainer.innerHTML);
+    localStorage.setItem("data", listContainer.innerHTML);
 }
 
 function showTask() {
